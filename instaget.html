@@ -1,0 +1,53 @@
+<html>
+	<head>
+	<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+	</head>
+	<body>
+		<input class="instaname" value="">
+        <button class="btnDo">do</button>
+		<div class="cont"></div>
+		<script>
+            
+//try some shit
+const interactive_call = (content) => {
+    let call_url = 'https://www.instagram.com/' + content + '/media/';
+    $.ajax({
+        dataType: 'json'
+        , url: call_url
+        , context: document.body
+    }).complete(function (data) {
+        if (data['status'] == 200) {
+            console.log('great success!!');
+            let obj = jQuery.parseJSON(data.responseText);
+            console.log(obj);
+            let html = '';
+            let re = /(\w+).(jpg)/g;
+            for(i in obj.items){
+                let str = obj.items[i].images.standard_resolution.url
+                let file = str.match(re)
+                
+                console.log(file);
+                html += '<img src="https://scontent-ams3-1.cdninstagram.com//'+file+'"  style="width:304px;height:228px;">';
+                $('.cont').html(html);
+            }
+        } 
+    });
+}
+            const DO = (instaname) =>{
+                console.log('do');
+                interactive_call(instaname);
+                
+            }
+            
+
+        $(() => {
+            $('.btnDo').on('click', () => {
+                let instaname = $('.instaname').val();
+                DO(instaname);
+            })	  
+        
+		})
+		</script>
+	</body>
+
+</html>
